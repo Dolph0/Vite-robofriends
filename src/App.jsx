@@ -6,7 +6,7 @@ import SearchBox from "./SearchBox"
 
 const App = () => {
     return (
-        <div className="flex justify-center">
+        <div className="">
         <h1>RoboFriends</h1>
         <SearchBox />
         <CardList robots={robots}/>
