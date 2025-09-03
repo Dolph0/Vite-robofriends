@@ -1,44 +1,42 @@
-import React, {Component} from "react";
+import React, { useState, useEffect} from "react";
 import CardList from "../components/CardList"
 import SearchBox from "../components/SearchBox"
 
 
-class App extends Component {
-    constructor() {
-        super()
-        this.state = {
-            robots: [],
-            searchfield: ""
-        }
-    }
+function App () {
+    const [robots, setRobots] = useState([])
+    const [searchfield, setSearchfield] = useState("")
+    const [count, setCount] = useState(0)
 
-    componentDidMount() {
+    useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
-        .then(response=> response.json())
-        .then(users=> {this.setState({robots: users})})
-    }
+        .then(response=>response.json())
+        .then(users =>{setRobots(users)})
+    },[count])
 
-    onSearchChange = (event) => {
-        this.setState({searchfield: event.target.value})
+    const onSearchChange = (event) => {
+        setSearchfield(event.target.value)
         
     }
 
-    render() {
-        const filteredRobots = this.state.robots.filter(robots => {
-            return robots.name.toLowerCase().includes(this.state.searchfield.toLowerCase())
-        })
-        if(this.state.robots.lenght === 0) {
-            return <h1>Loading</h1>
-        } else {
-        return (
-        <div className="flex justify-center items-center flex-col bg-gradient-to-r from-[rgb(101,115,242)] to-[rgb(58,207,190)] gap-4">
-        <h1>RoboFriends</h1>
-        <SearchBox searchChange = {this.onSearchChange}/>
-        <CardList robots={filteredRobots}/>
-        
-        </div>
+    
+    const filteredRobots = robots.filter(robot => {
+        return robot.name.toLowerCase().includes(searchfield.toLowerCase())
+    })
+
+    if(robots.lenght === 0) {
+        return <h1>Loading</h1>
+    } else {
+    return (
+    <div className="flex justify-center items-center flex-col bg-gradient-to-r from-[rgb(101,115,242)] to-[rgb(58,207,190)] gap-4">
+    <h1>RoboFriends</h1>
+    <button onClick={()=>setCount(count+1)}>Click Me!</button>
+    <SearchBox searchChange = {onSearchChange}/>
+    <CardList robots={filteredRobots}/>
+    
+    </div>
     )
     }
 }
-}
+
 export default App
